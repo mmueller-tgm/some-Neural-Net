@@ -132,18 +132,33 @@ class MyNetEncoder(json.JSONEncoder):
 
 
 if __name__ == "__main__":
-    # GK1
-    n = NeuroNet(3, 4, 4, 3)
-    n.import_net("../exports/GK1.export")
-    n.train("../train_data/GK1.json", 1000, verbose=False, epsilon=0.000001, learn_rate=0.9)
-    n.export_net("../exports/GK1.export")
+    # EK2
+    n = NeuroNet(2, 3, 1)
+    n.import_net("../exports/xnor.export")
+    n.train("../train_data/xnor.json", 10000, verbose=False, epsilon=0.0001, learn_rate=0.9)
+    n.export_net("../exports/xnor.export")
     decimal = 3
-    print("[0, 0, 0] equals:%s" % n.evaluate_round(decimal, [0, 0, 0]))
-    print("[0, 0, 1] equals:%s" % n.evaluate_round(decimal, [0, 0, 1]))
-    print("[0, 1, 0] equals:%s" % n.evaluate_round(decimal, [0, 1, 0]))
-    print("[0, 1, 1] equals:%s" % n.evaluate_round(decimal, [0, 1, 1]))
-    print("[1, 0, 0] equals:%s" % n.evaluate_round(decimal, [1, 0, 0]))
-    print("[1, 0, 1] equals:%s" % n.evaluate_round(decimal, [1, 0, 1]))
-    print("[1, 1, 0] equals:%s" % n.evaluate_round(decimal, [1, 1, 0]))
-    print("[1, 1, 1] equals:%s" % n.evaluate_round(decimal, [1, 1, 1]))
-    
+    print("[0, 0] equals:%s" % n.evaluate_round(decimal, [0, 0]))
+    print("[0, 1] equals:%s" % n.evaluate_round(decimal, [0, 1]))
+    print("[1, 0] equals:%s" % n.evaluate_round(decimal, [1, 0]))
+    print("[1, 1] equals:%s" % n.evaluate_round(decimal, [1, 1]))
+
+    n = NeuroNet(2, 3, 1)
+    n.import_net("../exports/nand.export")
+    n.train("../train_data/nand.json", 10000, verbose=False, epsilon=0.0001, learn_rate=0.9)
+    n.export_net("../exports/nand.export")
+    decimal = 3
+    print("[0, 0] equals:%s" % n.evaluate_round(decimal, [0, 0]))
+    print("[0, 1] equals:%s" % n.evaluate_round(decimal, [0, 1]))
+    print("[1, 0] equals:%s" % n.evaluate_round(decimal, [1, 0]))
+    print("[1, 1] equals:%s" % n.evaluate_round(decimal, [1, 1]))
+
+    n = NeuroNet(2, 3, 2)
+    n.import_net("../exports/EK2.export")
+    n.train("../train_data/EK2.json", 10000, verbose=False, epsilon=0.0001, learn_rate=0.9)
+    n.export_net("../exports/EK2.export")
+    decimal = 3
+    print("[0, 0] equals:%s" % n.evaluate_round(decimal, [0, 0]))
+    print("[0, 1] equals:%s" % n.evaluate_round(decimal, [0, 1]))
+    print("[1, 0] equals:%s" % n.evaluate_round(decimal, [1, 0]))
+    print("[1, 1] equals:%s" % n.evaluate_round(decimal, [1, 1]))
