@@ -132,9 +132,10 @@ class MyNetEncoder(json.JSONEncoder):
 
 
 if __name__ == "__main__":
+    # GK1
     n = NeuroNet(3, 4, 4, 3)
     n.import_net("../exports/GK1.export")
-    n.train("../train_data/GK1.json", 100000, verbose=False, epsilon=0.000001, learn_rate=0.01)
+    n.train("../train_data/GK1.json", 1000, verbose=False, epsilon=0.000001, learn_rate=0.9)
     n.export_net("../exports/GK1.export")
     decimal = 3
     print("[0, 0, 0] equals:%s" % n.evaluate_round(decimal, [0, 0, 0]))
@@ -145,10 +146,4 @@ if __name__ == "__main__":
     print("[1, 0, 1] equals:%s" % n.evaluate_round(decimal, [1, 0, 1]))
     print("[1, 1, 0] equals:%s" % n.evaluate_round(decimal, [1, 1, 0]))
     print("[1, 1, 1] equals:%s" % n.evaluate_round(decimal, [1, 1, 1]))
-
-
-
-
-
-
-
+    
