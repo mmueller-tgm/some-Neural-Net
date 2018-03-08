@@ -2,7 +2,6 @@ import json
 from random import random
 from math import exp
 
-
 class Node:
     def __init__(self, last_layer):
         self.d = random()*2-1

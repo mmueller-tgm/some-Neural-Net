@@ -3,6 +3,7 @@ import json
 import Layer
 import Node
 
+
 class NeuroNet():
     def __init__(self, *params):
         self.__create_net(params)
@@ -71,7 +72,7 @@ class NeuroNet():
             if verbose:
                 print("Gen error:%f"%err_)
         t = time.time()-t
-        print("Finished training with \"%s\" for %i times and it took %.3f seconds" % (file, i, t))
+        print("Finished training with \"%s\" for %i times and it took %.3f seconds and had an gernerational error of %f" % (file, i, t, err_))
 
 
     def back_propergate(self):
@@ -93,8 +94,6 @@ class NeuroNet():
         for i in self.layers[len(self.layers)-1].nodes:
             i.d += self.learn_rate * i.err
 
-
-
     def evaluate(self, *args):
         for i, o in enumerate(self.layers[1].nodes):
             o.value = args[0][i]
@@ -106,6 +105,16 @@ class NeuroNet():
             lst.append(o.value)
         return lst
 
+    def evaluate_round(self, decimal, *args):
+        erg = self.evaluate(*args)
+        for i in range(0, len(erg)):
+            erg[i] *= pow(10, decimal)
+            erg[i] = round(erg[i])
+            erg[i] /= pow(10, decimal)
+        return erg
+
+
+
     def __str__(self):
         return "nodes:%s r:%f" % (self.hl_nodes, self.learn_rate)
 
@@ -113,51 +122,29 @@ class NeuroNet():
 class MyNetEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, Node.Node):
-            return{"bias": o.d, "wji":o.weight_j}
+            return{"bias": o.d, "wji": o.weight_j}
         if isinstance(o, Layer.Layer):
             return o.nodes
         if isinstance(o, Layer.EmptyLayer):
             return
         if isinstance(o, NeuroNet):
-            return{"settings":o.hl_nodes, "layers":o.layers}
+            return{"settings": o.hl_nodes, "layers": o.layers}
 
 
 if __name__ == "__main__":
-    n = NeuroNet(2, 3, 1)
-    n.train("xor.json", 10000000, False, 0.001)
-    print("[1, 1] equals:%s" % n.evaluate([1, 1]))
-    n.train("xor.json", 10000000, False, 0.0001)
-    print("[1, 1] equals:%s" % n.evaluate([1, 1]))
-    n.train("xor.json", 10000000, False, 0.00001)
-    print("[1, 1] equals:%s" % n.evaluate([1, 1]))
-    """print("[1, 1] equals:%s" % n.evaluate([1, 1]))
-    n.train("xor.json", epsilon=0.001, verbose=False)
-    print("[1, 1] equals:%s" % n.evaluate([1, 1]))
-    n.train("xor.json", epsilon=0.0001, verbose=False)
-    print("[1, 1] equals:%s" % n.evaluate([1, 1]))
-    n.train("xor.json", epsilon=0.00001, verbose=False)
-    print("[1, 1] equals:%s" % n.evaluate([1, 1]))
-    n.export_net("xor_net.json")
-    n.train("and.json", epsilon=0.00001)
-    print("[1, 1] equals:%s" % n.evaluate([1, 1]))
-    n.train("nand.json", epsilon=0.00001)
-    print("[1, 1] equals:%s" % n.evaluate([1, 1]))
-    n.train("or.json", epsilon=0.00001)
-    print("[1, 1] equals:%s" % n.evaluate([1, 1]))
-    n.train("xor.json", epsilon=0.00001, verbose=False)
-    print("[1, 1] equals:%s" % n.evaluate([1, 1]))
-    n.import_net("xor_net.json")
-    print("[1, 1] equals:%s" % n.evaluate([1, 1]))
-    """
-    print("[1, 1] equals:%s" % n.evaluate([1, 1]))
-    n.export_net("xor_net.json")
-    n.train("or.json", epsilon=0.001)
-    print("[1, 1] equals:%s" % n.evaluate([1, 1]))
-    n.import_net('xor_net.json')
-    print("[1, 1] equals:%s" % n.evaluate([1, 1]))
-    i=1
-
-
+    n = NeuroNet(3, 4, 4, 3)
+    n.import_net("../exports/GK1.export")
+    n.train("../train_data/GK1.json", 100000, verbose=False, epsilon=0.000001, learn_rate=0.01)
+    n.export_net("../exports/GK1.export")
+    decimal = 3
+    print("[0, 0, 0] equals:%s" % n.evaluate_round(decimal, [0, 0, 0]))
+    print("[0, 0, 1] equals:%s" % n.evaluate_round(decimal, [0, 0, 1]))
+    print("[0, 1, 0] equals:%s" % n.evaluate_round(decimal, [0, 1, 0]))
+    print("[0, 1, 1] equals:%s" % n.evaluate_round(decimal, [0, 1, 1]))
+    print("[1, 0, 0] equals:%s" % n.evaluate_round(decimal, [1, 0, 0]))
+    print("[1, 0, 1] equals:%s" % n.evaluate_round(decimal, [1, 0, 1]))
+    print("[1, 1, 0] equals:%s" % n.evaluate_round(decimal, [1, 1, 0]))
+    print("[1, 1, 1] equals:%s" % n.evaluate_round(decimal, [1, 1, 1]))
 
 
 

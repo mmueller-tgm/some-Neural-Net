@@ -1,6 +1,5 @@
 from Node import Node
 
-
 class Layer:
     def __init__(self, node_count, *last_layer):
         if len(last_layer) == 0:
